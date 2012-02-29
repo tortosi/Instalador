@@ -1,0 +1,96 @@
+.: MSANCHO - http://linux.msgsistemes.es :.
+
+
+NUEVO SCRIPT DE INSTALACIÓN Y GESTIÓN DE SERVIDORES EN DEBIAN
+
+Funciones actuales y futuras:
+
+- Soporte multicore  - EN PROCESO
+
+- Instalación de los programas esenciales para la compilación del emulador  - FUNCIONAL
+
+- Descarga de repositorios para SkyFire  - TERMINADO
+
+- Descarga de repositorios para Arkania  - PENDIENTE
+
+- Descarga de repositorios para TrinityCore  - PENDIENTE
+
+- Actualización repositorios de SkyFire  - FUNCIONAL
+
+- Actualización repositorios de Arkania  - PENDIENTE
+
+- Actualización repositorios de TrinityCore  - PENDIENTE
+
+- Compilación del emulador en SkyFire  - TERMINADO
+
+- Compilación del emulador en Arkania  - PENDIENTE
+
+- Compilación del emulador en TrinityCore  - PENDIENTE
+
+- Instalación Bases de Datos en SkyFire  - FUNCIONAL
+
+- Instalación Bases de Datos en Arkania  - PENDIENTE
+
+- Instalación Bases de Datos en TrinityCore  - PENDIENTE
+
+- Instalación traducciones eswow2 en SkyFire  - TERMINADO
+
+- Instalación traducciones eswow2 en Arkania  - PENDIENTE
+
+- Instalación traducciones eswow2 en TrinityCore  - PENDIENTE
+
+- Colocación de dbc, maps y vmaps en SkyFire  - FUNCIONAL - Necesito las DBC en español!!!
+
+- Colocación de dbc, maps y vmaps en Arkania  - PENDIENTE - Necesito las DBC en español!!!
+
+- Colocación de dbc, maps y vmaps en TrinityCore  - PENDIENTE - Necesito las DBC en español!!!
+
+- Copias de seguridad de las bases de datos  - EN PROCESO
+
+- Actualización de las bases de datos en SkyFire  - PENDIENTE
+
+- Actualización de las bases de datos en Arkania  - PENDIENTE
+
+- Actualización de las bases de datos en TrinityCore  - PENDIENTE
+
+- Creación de script multicore  - EN PROCESO
+
+- Adaptación del Script para sistemas basados CentOS - PENDIENTE
+
+- Traducción de los menús a otros idiomas  - PENDIENTE
+
+- Creación de una web de Registro  - PENDIENTE
+
+- Crear menú para escoger idioma de la traducción (es / mx)  - EN PROCESO
+
+- Submenú para escoger base de datos world  - TERMINADO
+
+- Opciones de la configuración en dialogs  - FUNCIONAL
+
+- Configurador de la tabla realmlist de la DB auth en SkyFire  - FUNCIONAL
+
+- Configurador de la tabla realmlist de la DB auth en Arkania  - PENDIENTE
+
+- Configurador de la tabla realmlist de la DB auth en Trinitycore  - PENDIENTE
+
+- Configurador de archivos worldserver.conf y authserver.conf en SkyFire  - FUNCIONAL
+
+- Configurador de archivos worldserver.conf y authserver.conf en Arkania - PENDIENTE
+
+- Configurador de archivos worldserver.conf y authserver.conf en Trinitycore - PENDIENTE
+
+- Añadir una guía de usuario  - FUNCIONAL
+
+- Modificador de la tabla autobroadcast  - PENDIENTE
+
+- Instalador de un restarter automático  - PENDIENTE
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#      INSTALADOR DE EMULADORES PARA WORLD OF WARCRAFT        #
+#                                                             #
+#      Desarrollador: Msancho                                 #
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
