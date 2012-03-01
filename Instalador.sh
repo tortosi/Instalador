@@ -889,7 +889,7 @@ sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;skyfire;skyfire;auth\"/Log
 
 				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $characters" 12 51 $characters 2>&1 >/dev/tty)
+				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $char" 12 51 $char 2>&1 >/dev/tty)
 				sed -e "s/dbchar/$conf12/g" -i $server_sky/etc/world.conf
 
 				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
@@ -1391,7 +1391,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 		--backtitle "http://linux.msgsistemes.es" \
 		--nocancel \
 		--menu "\nInstalar las Bases de Datos" 20 80 8 \
-		"1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" "" \
+		"1 - Instalar base de datos world" "" \
 		"2 - Instalar base de datos auth" "" \
 		"3 - Instalar base de datos characters" "" \
 		"0 - Volver" "" 2> ~/var32
@@ -1505,7 +1505,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 				mysql $conecta -e "DROP DATABASE IF EXISTS ${char};"
 				mysql $conecta -e "create database ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
 				clear && echo "IMPORTANDO ..." && sleep 5s
-				mysql $conecta ${char} < $sqlchar_sky/character_database.sql
+				mysql $conecta ${char} < $sqlchar_ark/characters_database.sql
 				dialog --title "INFORMACIÓN" \
 				--backtitle "http://linux.msgsistemes.es" \
 				--msgbox "\nFinalizada la instalación de la base de datos Characters en ${char}." 10 50
@@ -1519,7 +1519,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 		--backtitle "http://linux.msgsistemes.es" \
 		--nocancel \
 		--menu "\nInstalar las Bases de Datos" 20 80 8 \
-		"1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" "" \
+		"1 - Instalar base de datos world" "" \
 		"2 - Instalar base de datos auth" "" \
 		"3 - Instalar base de datos characters" "" \
 		"0 - Volver" "" 2> ~/var32
@@ -1671,7 +1671,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 
 
 ####################################################################
-# 7.2.1 - Configurar Authserver.conf
+# Configurar Authserver.conf
 ####################################################################
 
 			if [ "$opcion36" = "1 - Configurar archivo authserver.conf" ]; then
@@ -1765,7 +1765,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 
 				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $characters" 12 51 $char 2>&1 >/dev/tty)
+				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $char" 12 51 $char 2>&1 >/dev/tty)
 				sed -e "s/dbchar/$conf12/g" -i $server_ark/etc/world.conf
 
 				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
