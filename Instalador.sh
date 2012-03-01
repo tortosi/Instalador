@@ -2449,7 +2449,439 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 		rm ~/var54
 		done
 
+
+####################################################################
+# Configuraciones varias
+####################################################################
+	elif [ "$opcion50" = "6 - Configuraciones varias" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nConfiguraciones varias" 20 80 8 \
+		"1 - Configurar tabla realmlist de la base de datos auth" "" \
+		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"0 - Volver" "" 2> var55
+		  
+		opcion55=$(cat var55)
+		rm var55
+
+		while [ "$opcion55" != "0 - Volver" ]; do
+
+
+####################################################################
+# Configurar tabla realmlist de la base de datos auth
+####################################################################
+		if [ "$opcion55" = "1 - Configurar tabla realmlist de la base de datos auth" ]; then
+			rm -f $server_tri/etc/confrealm.sql
+			echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`port\`,\`icon\`,\`color\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
+(1,'NombreReino','addressReino',portReino,1,0,1,0,0,12340);" >> $server_tri/etc/confrealm.sql
+
+			conf6=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nNombre que le quieres dar a tu reino:" 10 51 Trinity 2>&1 >/dev/tty)
+			sed -e "s/NombreReino/$conf6/g" -i $server_tri/etc/confrealm.sql
+
+			conf7=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nIp de conexión a tu servidor:" 10 51 127.0.0.1 2>&1 >/dev/tty)
+			sed -e "s/addressReino/$conf7/g" -i $server_tri/etc/confrealm.sql
+
+			conf8=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
+			sed -e "s/portReino/$conf8/g" -i $server_tri/etc/confrealm.sql
+
+			mysql $conecta $auth < $server_tri/etc/confrealm.sql
+			rm -f $server_tri/etc/confrealm.sql
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nYa tienes la Tabla realmlist configurada" 10 50
+			clear
+
+
+####################################################################
+# Configurar authserver.conf y worldserver.conf
+####################################################################
+		elif [ "$opcion55" = "2 - Configurar authserver.conf y worldserver.conf" ]; then
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nConfigurar authserver.conf y worldserver.conf" 20 80 8 \
+			"1 - Configurar archivo authserver.conf" "" \
+			"2 - Configurar archivo worldserver.conf" "" \
+			"0 - Volver" "" 2> var56
+			  
+			opcion56=$(cat var56)
+			rm var56
+
+			while [ "$opcion56" != "0 - Volver" ]; do
+
+
+####################################################################
+# Configurar Authserver.conf
+####################################################################
+			if [ "$opcion56" = "1 - Configurar archivo authserver.conf" ]; then
+				if [ ! -x $server_tri/etc/authserver.temp  ];then
+					rm -f $server_tri/etc/authserver.temp
+				fi
+				cp $server_tri/etc/authserver.conf.dist $server_tri/etc/authserver.temp
+
+				sed -e "s/LoginDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_tri/etc/authserver.temp
+
+				conf=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nDirectorio del archivo logs: \nValor por defecto logs" 10 51 logs 2>&1 >/dev/tty)
+				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf\"/g" -i $server_tri/etc/authserver.temp
+
+				conf2=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nConfiguración de los colores de salida en terminal: \nValor por defecto 13 11 9 5" 10 51 "13 11 9 5" 2>&1 >/dev/tty)	
+				sed -e "s/LogColors = \"\"/LogColors = \"$conf2\"/g" -i $server_tri/etc/authserver.temp
+
+				conf3=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nUsuario de MySQL: \nValor por defecto root" 10 51 root 2>&1 >/dev/tty)
+				sed -e "s/sqluser/$conf3/g" -i $server_tri/etc/authserver.temp
+
+				conf4=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--insecure \
+				--passwordbox "\nContraseña de MySQL: " 10 51 2>&1 >/dev/tty)
+				sed -e "s/sqlpass/$conf4/g" -i $server_tri/etc/authserver.temp
+
+				conf5=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 10 51 $auth 2>&1 >/dev/tty)
+				sed -e "s/dbauth/$conf5/g" -i $server_tri/etc/authserver.temp
+
+				# PidFile = "auth.pid" NO TOCAR!!! IMPRESCINDIBLE.
+				sed -e "s/PidFile = \"\"/PidFile = \"auth.pid\"/g" -i $server_tri/etc/authserver.temp
+
+				cp $server_tri/etc/authserver.temp $server_tri/etc/authserver.conf
+
+				rm -f $server_tri/etc/authserver.temp
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nHas configurado el archivo authserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor de logueo." 10 50
+				clear
+
+
+####################################################################
+# Configurar Worldserver.conf
+####################################################################
+			elif [ "$opcion56" = "2 - Configurar archivo worldserver.conf" ]; then
+				if [ ! -x $server_tri/etc/world.conf  ];then
+					rm -f $server_tri/etc/world.conf
+				fi
+				cp $server_tri/etc/worldserver.conf.dist $server_tri/etc/world.conf
+sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;auth\"/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_tri/etc/world.conf
+				sed -e "s/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;trinity;trinity;world\"/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbworld\"/g" -i $server_tri/etc/world.conf
+				sed -e "s/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;trinity;trinity;characters\"/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbchar\"/g" -i $server_tri/etc/world.conf
+
+				conf6=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 1/42\n\nDirectorio del archivo data: \nValor por defecto data" 12 51 data 2>&1 >/dev/tty)
+				sed -e "s/DataDir = \"\.\"/DataDir = \"\.\.\/$conf6\"/g" -i $server_tri/etc/world.conf
+
+				conf7=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 2/42\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
+				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf7\"/g" -i $server_tri/etc/world.conf
+
+				conf8=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 3/42\n\nUsuario de MySQL: \nValor por defecto root" 12 51 root 2>&1 >/dev/tty)
+				sed -e "s/sqluser/$conf8/g" -i $server_tri/etc/world.conf
+
+				conf9=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--insecure \
+				--passwordbox "\nOpción 4/42\n\nContraseña de MySQL: " 12 51 2>&1 >/dev/tty)
+				sed -e "s/sqlpass/$conf9/g" -i $server_tri/etc/world.conf
+
+				conf10=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 5/42\n\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 12 51 $auth 2>&1 >/dev/tty)
+				sed -e "s/dbauth/$conf10/g" -i $server_tri/etc/world.conf
+
+				conf11=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 6/42\n\nNombre de la base de datos del World: \nValor por defecto $world" 12 51 $world 2>&1 >/dev/tty)
+				sed -e "s/dbworld/$conf11/g" -i $server_tri/etc/world.conf
+
+				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $char" 12 51 $char 2>&1 >/dev/tty)
+				sed -e "s/dbchar/$conf12/g" -i $server_tri/etc/world.conf
+
+				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 8/42\n\nPuerto de conexión al worldserver: \nValor por defecto 8085" 12 51 8085 2>&1 >/dev/tty)
+				sed -e "s/WorldServerPort = 8085/WorldServerPort = $conf13/g" -i $server_tri/etc/world.conf
+
+				conf14=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 9/42\n\nLímite de jugadores conectados simultaneamente: \nValor por defecto 100" 12 51 100 2>&1 >/dev/tty)
+				sed -e "s/PlayerLimit = 100/PlayerLimit = $conf14/g" -i $server_tri/etc/world.conf
+
+				conf15=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nConfiguración de los colores de salida en terminal: \nValor por defecto 13 11 9 5" 10 51 "13 11 9 5" 2>&1 >/dev/tty)	
+				sed -e "s/LogColors = \"\"/LogColors = \"$conf15\"/g" -i $server_tri/etc/world.conf
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 11/42\n\n¿Quieres que se cree un archivo log con los comandos o acciones realizadas como GM?\nEs recomendable si tienes nuevos GM y quieres ver como trabajan." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/LogDB.GM = 0/LogDB.GM = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 12/42\n\n¿Quieres que se cree un archivo log con las conexiones desde telnet?\nEs útil si tienes una tienda web o gestionas el servidor por telnet." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/LogDB.RA = 0/LogDB.RA = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--nocancel \
+				--menu "\nOpción 13/42\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
+				"1 - Reino PVP" "" \
+				"2 - Reino Normal" "" 2> conf16
+				conf16=$(cat conf16)
+				if [ "$conf16" = "1 - Reino PVP" ]; then
+					sed -e "s/GameType = 0/GameType = 1/g" -i $server_tri/etc/world.conf
+				else
+					sed -e "s/GameType = 0/GameType = 0/g" -i $server_tri/etc/world.conf
+				fi
+				rm conf16
+
+				#RESERVADO
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 15/42\n\n¿Quieres que se anuncien por taberna los eventos automáticos?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Event.Announce = 0/Event.Announce = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 16/42\n\n¿Quieres activar el buscador de mazmorras?\nTodavía experimental en esta versión de emulador" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/DungeonFinder.Enable = 0/DungeonFinder.Enable = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--defaultno \
+				--yesno "\nOpción 17/42\n\n¿Quieres que en la misma cuenta se puedan crear alianzas y hordas?" 12 51
+				if [ $? = 1 ]; then
+					sed -e "s/AllowTwoSide.Accounts = 1/AllowTwoSide.Accounts = 0/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 18/42\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por los canales de chat como taberna o \"decir\"?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Chat = 0/AllowTwoSide.Interaction.Chat = 1/g" -i $server_tri/etc/world.conf && sed -e "s/AllowTwoSide.Interaction.Channel = 0/AllowTwoSide.Interaction.Channel = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 19/42\n\n¿Quieres que se puedan crear grupos mixtos entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor poder hacer mazmorras o raids conjuntamente." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Group = 0/AllowTwoSide.Interaction.Group = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 20/42\n\n¿Quieres que se pueda interactuar en las subastas entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Auction = 0/AllowTwoSide.Interaction.Auction = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 21/42\n\n¿Quieres que se pueda mandar correos a la facción contraria?." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Mail = 0/AllowTwoSide.Interaction.Mail = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 22/42\n\n¿Quieres que se pueda comerciar con la facción contraria?." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Trade = 0/AllowTwoSide.Trade = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nOpción 23/42\n\nRATES DEL SERVIDOR:\n\nLos rates son lo que determinan lo rápido que se avanza en el juego.\nLos servidores de Blizzard tienen un rate de x1 por lo que si nosotros ponemos rates x3 se multiplican los valores al triple.\nEjemplo: Ponemos rates de experiencia al matar bichos x3. Si al nivel 10 para subir al 11 debemos matar 30 zebras en el de Blizzard, al nuestro con 10 ya subiríamos." 22 60
+				clear
+
+				conf17=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 24/42\n\nRATES DEL SERVIDOR:\nRates de objetos mediocres(grises)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Poor             = 1/Rate.Drop.Item.Poor             = $conf17/g" -i $server_tri/etc/world.conf
+
+				conf18=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 25/42\n\nRATES DEL SERVIDOR:\nRates de objetos normales(blancos)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Normal           = 1/Rate.Drop.Item.Normal           = $conf18/g" -i $server_tri/etc/world.conf
+
+				conf19=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 26/42\n\nRATES DEL SERVIDOR:\nRates de objetos poco frecuentes(verdes)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Uncommon         = 1/Rate.Drop.Item.Uncommon         = $conf19/g" -i $server_tri/etc/world.conf
+
+				conf20=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 27/42\n\nRATES DEL SERVIDOR:\nRates de objetos raros(azules)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Rare             = 1/Rate.Drop.Item.Rare             = $conf20/g" -i $server_tri/etc/world.conf
+
+				conf21=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 28/42\n\nRATES DEL SERVIDOR:\nRates de objetos épicos(morados)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Epic             = 1/Rate.Drop.Item.Epic             = $conf21/g" -i $server_tri/etc/world.conf
+
+				conf22=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 29/42\n\nRATES DEL SERVIDOR:\nRates de objetos legendarios(anaranjados)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Legendary        = 1/Rate.Drop.Item.Legendary        = $conf22/g" -i $server_tri/etc/world.conf
+
+				conf23=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 30/42\n\nRATES DEL SERVIDOR:\nRates de objetos artefactos" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Artifact         = 1/Rate.Drop.Item.Artifact         = $conf23/g" -i $server_tri/etc/world.conf
+
+				conf24=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 31/42\n\nRATES DEL SERVIDOR:\nRates de objetos de misión" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Referenced       = 1/Rate.Drop.Item.Referenced       = $conf24/g" -i $server_tri/etc/world.conf
+
+				conf25=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 32/42\n\nRATES DEL SERVIDOR:\nRates de dinero" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Money                 = 1/Rate.Drop.Money                 = $conf25/g" -i $server_tri/etc/world.conf
+
+				conf26=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 33/42\n\nRATES DEL SERVIDOR:\nRates experiencia por muertes" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Kill    = 1/Rate.XP.Kill    = $conf26/g" -i $server_tri/etc/world.conf
+
+				conf27=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 34/42\n\nRATES DEL SERVIDOR:\nRates experiencia en misiones" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Quest   = 1/Rate.XP.Quest   = $conf27/g" -i $server_tri/etc/world.conf
+
+				conf28=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 35/42\n\nRATES DEL SERVIDOR:\nRates experiencia por exploración" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Explore = 1/Rate.XP.Explore = $conf28/g" -i $server_tri/etc/world.conf
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 36/42\n\n¿Quieres que se anuncie por canal global cuando se anote alguien a BG?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Battleground.QueueAnnouncer.Enable = 0/Battleground.QueueAnnouncer.Enable = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				# RESERVADO
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 39/42\n\n¿Quieres que se adjudiquen los puntos de arenas automáticamente cada semana? Es recomendable que sí." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Arena.AutoDistributePoints = 0/Arena.AutoDistributePoints = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 40/42\n\n¿Quieres que se anuncie por canal global cuando se anote un grupo a arenas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Arena.QueueAnnouncer.Enable = 0/Arena.QueueAnnouncer.Enable = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 41/42\n\n¿Deseas activar el acceso a la máquina por telnet?\nEsto es necesario si quieres tener una tienda de artículos en la web o gestionar el servidor remotamente." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Ra.Enable = 0/Ra.Enable = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 42/42\n\n¿Si un jugador es Kickeado por un GM, quieres que se muestre el anuncio del kick por el canal global?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/ShowKickInWorld = 0/ShowKickInWorld = 1/g" -i $server_tri/etc/world.conf
+				fi
+
+				### Configuraciones que cambiamos automáticamente:
+				#PlayerSaveInterval = 900000
+				sed -e "s/PlayerSaveInterval = 900000/PlayerSaveInterval = 300000/g" -i $server_tri/etc/world.conf
+
+				#MaxCoreStuckTime = 0
+				sed -e "s/MaxCoreStuckTime = 0/MaxCoreStuckTime = 10/g" -i $server_tri/etc/world.conf
+
+				#GmLogPerAccount = 0
+				sed -e "s/GmLogPerAccount = 0/GmLogPerAccount = 1/g" -i $server_tri/etc/world.conf
+
+				#RealmZone = 1
+				sed -e "s/RealmZone = 1/RealmZone = 11/g" -i $server_tri/etc/world.conf
+
+				#Motd = "Welcome to a Skyfire....
+				sed -e "s/Welcome to a Trinity Core server./Bienvenido a nuestro servidor.@Esperamos que sea de tu agrado/g" -i $server_tri/etc/world.conf
+
+				#AllowPlayerCommands = 0
+				# sed -e "s/AllowPlayerCommands = 0/AllowPlayerCommands = 1/g" -i $server_tri/etc/world.conf
+
+				#Die.Command.Mode = 1
+				sed -e "s/Die.Command.Mode = 1/Die.Command.Mode = 0/g" -i $server_tri/etc/world.conf
+
+				#PidFile = "world.pid"  IMPRESCINDIBLE!!! NO TOCAR.  
+				sed -e "s/PidFile = \"\"/PidFile = \"world.pid\"/g" -i $server_tri/etc/world.conf
+
+				cp $server_tri/etc/world.conf $server_tri/etc/worldserver.conf
+				rm -f $server_tri/etc/world.conf
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nHas configurado el archivo worldserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor del juego." 10 50
+				clear
+			fi
+
+
+########  CONCLUSIÓN MENÚ Configurar authserver.conf y worldserver.conf  ########
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nConfigurar authserver.conf y worldserver.conf" 20 80 8 \
+			"1 - Configurar archivo authserver.conf" "" \
+			"2 - Configurar archivo worldserver.conf" "" \
+			"0 - Volver" "" 2> ~/var56
+		  
+			opcion56=$(cat ~/var56)
+			rm ~/var56
+			done
+		fi
+
+
+########  CONCLUSIÓN MENÚ 7  ########
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nConfiguraciones varias" 20 80 8 \
+		"1 - Configurar tabla realmlist de la base de datos auth" "" \
+		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"0 - Volver" "" 2> var55
+		  
+		opcion55=$(cat var55)
+		rm var55
+		done
 	fi
+
+
 ########  CONCLUSIÓN MENÚ Trinitycore versión 3.3.5a (12340)  ######## 
 	dialog --title "Menú de opciones --- Creado por MSANCHO" \
 	--backtitle "http://linux.msgsistemes.es" \
