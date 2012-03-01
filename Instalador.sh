@@ -71,8 +71,10 @@ cata_es_ark=/home/`echo $USER`/Repos/esWoW2-Cata-es/Arkania
 cata_mx_ark=/home/`echo $USER`/Repos/esWoW2-Cata-mx/Arkania
 cata_es_sky=/home/`echo $USER`/Repos/esWoW2-Cata-es/SkyFire
 cata_mx_sky=/home/`echo $USER`/Repos/esWoW2-Cata-mx/SkyFire
-wotlk_es=/home/`echo $USER`/Repos/esWoW2-WoTLK-es
-wotlk_mx=/home/`echo $USER`/Repos/esWoW2-WoTLK-mx
+wotlk_com_es=/home/`echo $USER`/Repos/esWoW2-WoTLK-es/TrinityCore/Comunes/
+wotlk_com_mx=/home/`echo $USER`/Repos/esWoW2-WoTLK-mx/TrinityCore/Comunes/
+wotlk_es=/home/`echo $USER`/Repos/esWoW2-WoTLK-es/TrinityCore/TDB
+wotlk_mx=/home/`echo $USER`/Repos/esWoW2-WoTLK-mx/TrinityCore/TDB
 db_ark=/home/`echo $USER`/Repos/ArkDB/Databases
 db_ccdb=/home/`echo $USER`/Repos/CCDB/CCDB/database/main_db/world_rebase
 db_sky=/home/`echo $USER`/Repos/SkyFireDB/main_db/world
@@ -82,16 +84,16 @@ db1_ark=/home/`echo $USER`/Repos/ArkDB/Databases/arkcore
 db1_ark_sky=/home/`echo $USER`/Repos/ArkDB/Databases/skyfire/rebase
 db_act_ark=/home/`echo $USER`/Repos/ArkCORE/sql/updates/world
 db_act_sky=/home/`echo $USER`/Repos/SkyFireEMU/sql/updates/world
-db_act_tri=
+db_act_tri=/home/`echo $USER`/Repos/TrinityCore/sql/updates/world
 sqlchar_ark=/home/`echo $USER`/Repos/ArkCORE/sql/base
 sqlchar_sky=/home/`echo $USER`/Repos/SkyFireEMU/sql/base
-sqlchar_tri=
+sqlchar_tri=/home/`echo $USER`/Repos/TrinityCore/sql/base
 sqlauth_ark=/home/`echo $USER`/Repos/ArkCORE/sql/base
 sqlauth_sky=/home/`echo $USER`/Repos/SkyFireEMU/sql/base
-sqlauth_tri=
+sqlauth_tri=/home/`echo $USER`/Repos/TrinityCore/sql/base
 core_ark=/home/`echo $USER`/Repos/ArkCORE
 core_sky=/home/`echo $USER`/Repos/SkyFireEMU
-core_tri=
+core_tri=/home/`echo $USER`/Repos/TrinityCore
 server_ark=/home/`echo $USER`/Server_ark
 server_sky=/home/`echo $USER`/Server_sky
 server_tri=/home/`echo $USER`/Server_tri
@@ -2052,7 +2054,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 	fi
 
 
-########  CONCLUSIÓN MENÚ SkyFire versión 4.0.6a (13623)  ######## 
+########  CONCLUSIÓN MENÚ Arkania versión 4.0.6a (13623)  ######## 
 	dialog --title "Menú de opciones --- Creado por MSANCHO" \
 	--backtitle "http://linux.msgsistemes.es" \
 	--nocancel \
@@ -2081,8 +2083,395 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 #####################################################################################################
 elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 	dialog --title "Menú de opciones --- Creado por MSANCHO" \
-	--msgbox "\nTodavía no tenemos preparado el script para Trinitycore, pero en breve lo tendrás a tu disposición" 10 50
-	clear
+	--backtitle "http://linux.msgsistemes.es" \
+	--nocancel \
+	--menu "\nOpciones disponibles:" 20 80 11 \
+	"1 - Obtención o actualización de todos los archivos necesarios" "" \
+	"2 - Compilar el emulador" "" \
+	"3 - DBC's, maps y vmaps - Descarga y colocación en directorio" "" \
+	"4 - Instalar las Bases de Datos" "" \
+	"5 - Instalar traducciones al español de eswow2" "" \
+	"6 - Configuraciones varias" "" \
+	"0 - Salir de la aplicación" "" 2> ~/var50
+	  
+	opcion50=$(cat ~/var50)
+	
+	if [ "$opcion50" = "0 - Salir de la aplicación" ]; then
+		rm ~/var*
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--msgbox "\nGracias por usar el script de instalación." 10 50
+		clear
+		exit
+	fi
+	while [ "$opcion50" != "0 - Salir de la aplicación" ]; do
+
+
+####################################################################
+# Menú - Obtención o actualización de todos los archivos necesarios
+####################################################################
+	if [ "$opcion50" = "1 - Obtención o actualización de todos los archivos necesarios" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+		"1 - Descargar repositorios" "" \
+		"2 - Actualizar repositorios" "" \
+		"0 - Volver" "" 2> ~/var51
+			  
+		opcion51=$(cat ~/var51)
+		rm ~/var*
+	
+		while [ "$opcion51" != "0 - Volver" ]; do
+
+
+####################################################################
+# Descargar repositorios
+####################################################################
+		if [ "$opcion51" = "1 - Descargar repositorios" ]; then
+			clear
+			if [ ! -x /home/`echo $USER`/Repos  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nSe va a crear la carpeta de repositorios dentro de nuestro home" 10 50 5
+				clear
+				cd /home/`echo $USER`/ && mkdir Repos
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/TrinityCore  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nVamos a obtener los repositorios de TrinityCore" 10 50 5
+				clear
+				cd $repos && git clone $rep_tricore
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/TDB-335  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nVamos a descargar los repositorios de TDB." 10 50 5
+				clear
+				cd $repos && git clone $rep_tdb
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/esWoW2-WoTLK-es  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nLas traducciones en español para España" 10 50 5
+				clear
+				cd $repos && git clone $rep_wotlk_es
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/esWoW2-WoTLK-mx  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\ny finalmente las traducciones en español para Latino-América." 10 50 5
+				clear
+				cd $repos && git clone $rep_wotlk_mx
+			fi
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nTodos los repositorios están descargados." 8 50
+			clear
+
+
+####################################################################
+# Actualizar repositorios 
+####################################################################
+		elif [ "$opcion51" = "2 - Actualizar repositorios" ]; then
+			clear && cd $core_tri && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios del core actualizados." 10 50 5
+			clear
+			cd $repos/TDB-335 && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios de las bases de datos actualizados." 10 50 5
+			clear
+			cd $repos/esWoW2-WoTLK-es && git pull origin master
+			cd $repos/esWoW2-WoTLK-mx && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios de las traducciones actualizados." 10 50 5
+			clear
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nTodos los repositorios han sido actualizados." 8 50
+			clear
+		fi
+
+
+########  CONCLUSIÓN MENÚ Obtención o actualización de todos los archivos necesarios  ########  
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+		"1 - Descargar repositorios" "" \
+		"2 - Actualizar repositorios" "" \
+		"0 - Volver" "" 2> ~/var51
+		
+		opcion51=$(cat ~/var51)
+		rm ~/var*
+		done
+
+
+####################################################################
+# Compilar el emulador
+####################################################################
+	elif [ "$opcion50" = "2 - Compilar el emulador" ]; then
+		if [ ! -x $core_tri/build  ];then
+			cd $core_tri && mkdir build
+		fi
+		if [ ! -x $server_tri  ];then
+			cd /home/`echo $USER`/ && mkdir Server_tri
+		fi
+		if [ ! -x $server_tri/Backups  ];then
+			cd $server_tri && mkdir Backups
+		fi
+		if [ ! -x $server_tri/logs  ];then
+			cd $server_tri && mkdir logs
+		fi
+		cd $core_tri/build  && clear
+		cmake ../ -DPREFIX=/home/`echo $USER`/Server_tri
+		make -j$cores && sudo make install
+		sudo chown -R `echo $USER` $server_tri
+		if [ ! -x $server_tri/bin/world.pid  ];then
+			echo "123456" >> $server_tri/bin/world.pid
+		fi
+		
+		dialog --title "INFORMACIÓN" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--msgbox "\nHas terminado de compilar tu emulador. Si todo ha salido correctamete lo encontrarás en tu home, dentro de la carpeta Server_tri" 8 50
+		clear
+
+
+####################################################################
+# DBC's, maps y vmaps - Descarga y colocación en directorio
+####################################################################
+	elif [ "$opcion50" = "3 - DBC's, maps y vmaps - Descarga y colocación en directorio" ]; then
+		if [ ! -x $server_tri/data  ];then
+			clear && cd $server_tri && mkdir data && cd data
+			wget http://dl.dropbox.com/u/62758511/Wow/data335a.tar.gz
+			tar xvzf data335a.tar.gz && rm data335a.tar.gz
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nSe ha creado una carpeta llamada data con las dbc, maps y vmaps en su interior" 8 50
+			clear
+		else
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nYa está la carpeta data creada y no se han descargado los archivos.\n\nSi deseas reinstalarlos de nuevo, borra la carpeta data de tu directorio del servidor y ejecuta de nuevo este mismo paso" 12 50
+		fi
+
+
+####################################################################
+# Instalar las Bases de Datos
+####################################################################
+	elif [ "$opcion50" = "4 - Instalar las Bases de Datos" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar las Bases de Datos" 20 80 8 \
+		"1 - Instalar base de datos world" "" \
+		"2 - Instalar base de datos auth" "" \
+		"3 - Instalar base de datos characters" "" \
+		"0 - Volver" "" 2> ~/var52
+		  
+		opcion52=$(cat ~/var52)
+		rm ~/var52
+	
+		while [ "$opcion52" != "0 - Volver" ]; do
+
+
+####################################################################
+# Instalar base de datos TDB
+####################################################################
+		if [ "$opcion52" = "1 - Instalar base de datos world" ]; then
+			dialog --title "ATENCIÓN!" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--defaultno \
+			--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${world} ¿Estás seguro?" 8 50 
+			if [ $? = 0 ]; then
+				mysql $conecta -e "DROP DATABASE IF EXISTS ${world};"
+				mysql $conecta -e "create database ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+				clear && echo "IMPORTANDO ARCHIVO PRINCIPAL..."
+				mysql $conecta ${world} < $db_tdb/TDB_full_335.sql
+				clear && echo "IMPORTANDO ARCHIVOS DE ACTUALIZACIONES DEL CORE..." && sleep 5s
+				max=`ls -1 "${db_act_tri}"/*.sql | wc -l`
+				i=0
+				for archivo in "${db_act_tri}"/*.sql; do
+				i=$((${i}+1))
+				echo " [${i}/${max}] importando: ${archivo##*/}"
+				mysql $conecta ${world} < "${archivo}"
+				done	
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nFinalizada la instalación de la base de datos TDB en ${world}." 10 50
+				clear
+			fi
+
+
+####################################################################
+# Instalar base de datos auth
+####################################################################
+		elif [ "$opcion52" = "2 - Instalar base de datos auth" ]; then
+			dialog --title "ATENCIÓN!" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--defaultno \
+			--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${auth} ¿Estás seguro?" 8 50
+			if [ $? = 0 ]; then
+				mysql $conecta -e "DROP DATABASE IF EXISTS ${auth};"
+				mysql $conecta -e "create database ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+				clear && echo "IMPORTANDO ..." && sleep 5s
+				mysql $conecta ${auth} < $sqlauth_tri/auth_database.sql
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nFinalizada la instalación de la base de datos Auth en ${auth}." 10 50
+				clear
+			fi
+
+
+####################################################################
+# Instalar base de datos characters
+####################################################################
+		elif [ "$opcion52" = "3 - Instalar base de datos characters" ]; then
+			dialog --title "ATENCIÓN!" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--defaultno \
+			--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${char} ¿Estás seguro?" 8 50
+			if [ $? = 0 ]; then
+				mysql $conecta -e "DROP DATABASE IF EXISTS ${char};"
+				mysql $conecta -e "create database ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+				clear && echo "IMPORTANDO ..." && sleep 5s
+				mysql $conecta ${char} < $sqlchar_tri/characters_database.sql
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nFinalizada la instalación de la base de datos Characters en ${char}." 10 50
+				clear
+			fi
+		fi
+
+
+########  CONCLUSIÓN MENÚ Instalar las Bases de Datos  ######## 
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar las Bases de Datos" 20 80 8 \
+		"1 - Instalar base de datos world" "" \
+		"2 - Instalar base de datos auth" "" \
+		"3 - Instalar base de datos characters" "" \
+		"0 - Volver" "" 2> ~/var52
+		  
+		opcion52=$(cat ~/var52)
+		rm ~/var52
+		done
+
+
+####################################################################
+# Instalar traducciones al español de eswow2
+####################################################################
+	elif [ "$opcion50" = "5 - Instalar traducciones al español de eswow2" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar traducciones al español de eswow2" 20 80 8 \
+		"1 - Traducción de WoTLK a Español de España" "" \
+		"2 - Traducción de WoTLK a Español de Latino-América" "" \
+		"0 - Volver" "" 2> ~/var54
+	  
+		opcion54=$(cat ~/var54)
+		rm ~/var54
+
+		while [ "$opcion54" != "0 - Volver" ]; do
+
+
+####################################################################
+# Traducción de Cataclysm a Español de España
+####################################################################
+		if [ "$opcion54" = "1 - Traducción de WoTLK a Español de España" ]; then
+			clear
+			echo "IMPORTANDO LOS ARCHIVOS COMUNES..."
+			max=`ls -1 "${wotlk_com_es}"/*.sql | wc -l`
+			i=0
+			for table in "${wotlk_com_es}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] Importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			echo "IMPORTANDO LOS ESPECÍFICOS DE TRINITYCORE..." && sleep 4s
+			max=`ls -1 "${wotlk_es}"/*.sql | wc -l`
+			i=0
+			for table in "${wotlk_es}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nFinalizada la traducción de la base de datos." 10 50
+			clear
+
+
+####################################################################
+# Traducción de Cataclysm a Español de Latino-América
+####################################################################
+		elif [ "$opcion54" = "2 - Traducción de WoTLK a Español de Latino-América" ]; then
+			clear
+			echo "IMPORTANDO LOS ARCHIVOS COMUNES..."
+			max=`ls -1 "${wotlk_com_mx}"/*.sql | wc -l`
+			i=0
+			for table in "${wotlk_com_mx}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] Importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			echo "IMPORTANDO LOS ESPECÍFICOS DE TRINITYCORE..." && sleep 4s
+			max=`ls -1 "${wotlk_mx}"/*.sql | wc -l`
+			i=0
+			for table in "${wotlk_mx}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nFinalizada la traducción de la base de datos." 10 50
+			clear
+		fi
+
+
+########  CONCLUSIÓN MENÚ Instalar traducciones al español de eswow2  ######## 
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar traducciones al español de eswow2" 20 80 8 \
+		"1 - Traducción de WoTLK a Español de España" "" \
+		"2 - Traducción de WoTLK a Español de Latino-América" "" \
+		"0 - Volver" "" 2> ~/var54
+	  
+		opcion54=$(cat ~/var54)
+		rm ~/var54
+		done
+
+	fi
+########  CONCLUSIÓN MENÚ Trinitycore versión 3.3.5a (12340)  ######## 
+	dialog --title "Menú de opciones --- Creado por MSANCHO" \
+	--backtitle "http://linux.msgsistemes.es" \
+	--nocancel \
+	--menu "\nOpciones disponibles:" 20 80 11 \
+	"1 - Obtención o actualización de todos los archivos necesarios" "" \
+	"2 - Compilar el emulador" "" \
+	"3 - DBC's, maps y vmaps - Descarga y colocación en directorio" "" \
+	"4 - Instalar las Bases de Datos" "" \
+	"5 - Instalar traducciones al español de eswow2" "" \
+	"6 - Configuraciones varias" "" \
+	"0 - Salir de la aplicación" "" 2> ~/var50
+	  
+	opcion50=$(cat ~/var50)
+	if [ "$opcion50" = "0 - Salir de la aplicación" ]; then
+		rm ~/var*
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--msgbox "\nGracias por usar el script de instalación." 10 50
+		exit
+	fi
+	done
 
 
 ####################################################################
