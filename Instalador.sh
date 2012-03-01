@@ -279,7 +279,7 @@ elif [ "$opcion0" = "2 - SkyFire versión 4.0.6a (13623)" ]; then
 ####################################################################
 		if [ "$opcion3" = "1 - Descargar repositorios" ]; then
 			clear
-			if [ ! -x /home/`echo $USER`/  ];then
+			if [ ! -x /home/`echo $USER`/Repos  ];then
 				dialog --title "INFORMACIÓN" \
 				--backtitle "http://linux.msgsistemes.es" \
 				--pause "\nSe va a crear la carpeta de repositorios dentro de nuestro home" 10 50 5
@@ -763,7 +763,7 @@ elif [ "$opcion0" = "2 - SkyFire versión 4.0.6a (13623)" ]; then
 			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
 			sed -e "s/portReino/$conf8/g" -i $server_sky/etc/confrealm.sql
 
-			mysql $conecta auth < $server_sky/etc/confrealm.sql
+			mysql $conecta $auth < $server_sky/etc/confrealm.sql
 			rm -f $server_sky/etc/confrealm.sql
 			dialog --title "INFORMACIÓN" \
 			--backtitle "http://linux.msgsistemes.es" \
@@ -827,7 +827,7 @@ elif [ "$opcion0" = "2 - SkyFire versión 4.0.6a (13623)" ]; then
 
 				conf5=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nNombre de la base de datos Autentificación: \nValor por defecto auth" 10 51 auth 2>&1 >/dev/tty)
+				--inputbox "\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 10 51 $auth 2>&1 >/dev/tty)
 				sed -e "s/dbauth/$conf5/g" -i $server_sky/etc/authserver.temp
 
 				# PidFile = "auth.pid" NO TOCAR!!! IMPRESCINDIBLE.
@@ -879,17 +879,17 @@ sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;skyfire;skyfire;auth\"/Log
 
 				conf10=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nOpción 5/42\n\nNombre de la base de datos Autentificación: \nValor por defecto auth" 12 51 auth 2>&1 >/dev/tty)
+				--inputbox "\nOpción 5/42\n\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 12 51 $auth 2>&1 >/dev/tty)
 				sed -e "s/dbauth/$conf10/g" -i $server_sky/etc/world.conf
 
 				conf11=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nOpción 6/42\n\nNombre de la base de datos del World: \nValor por defecto world" 12 51 world 2>&1 >/dev/tty)
+				--inputbox "\nOpción 6/42\n\nNombre de la base de datos del World: \nValor por defecto $world" 12 51 $world 2>&1 >/dev/tty)
 				sed -e "s/dbworld/$conf11/g" -i $server_sky/etc/world.conf
 
 				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
 				--backtitle "http://linux.msgsistemes.es" \
-				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto characters" 12 51 characters 2>&1 >/dev/tty)
+				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $characters" 12 51 $characters 2>&1 >/dev/tty)
 				sed -e "s/dbchar/$conf12/g" -i $server_sky/etc/world.conf
 
 				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
@@ -1204,17 +1204,11 @@ sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;skyfire;skyfire;auth\"/Log
 #####################################################################################################
 # Menú - ArkCORE versión 4.0.6a (13623)
 #####################################################################################################
-elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
-	dialog --title "Menú de opciones --- Creado por MSANCHO" \
-	--msgbox "\nTodavía no tenemos preparado el script para ArkCore, pero en breve lo tendrás a tu disposición" 10 50
-	clear
-
-
-'elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
+elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 	dialog --title "Menú de opciones --- Creado por MSANCHO" \
 	--backtitle "http://linux.msgsistemes.es" \
 	--nocancel \
-	--menu "\nMenú de ArkCORE - Opciones disponibles:" 20 80 11 \
+	--menu "\nOpciones disponibles:" 20 80 11 \
 	"1 - Obtención o actualización de todos los archivos necesarios" "" \
 	"2 - Compilar el emulador" "" \
 	"3 - DBC's, maps y vmaps - Descarga y colocación en directorio" "" \
@@ -1235,7 +1229,830 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 	while [ "$opcion30" != "0 - Salir de la aplicación" ]; do
 
 
-########  CONCLUSIÓN MENÚ ArkCORE versión 4.0.6a (13623)  ######## 
+####################################################################
+# Menú - Obtención o actualización de todos los archivos necesarios
+####################################################################
+	if [ "$opcion30" = "1 - Obtención o actualización de todos los archivos necesarios" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+		"1 - Descargar repositorios" "" \
+		"2 - Actualizar repositorios" "" \
+		"0 - Volver" "" 2> ~/var31
+			  
+		opcion31=$(cat ~/var31)
+		rm ~/var*
+	
+		while [ "$opcion31" != "0 - Volver" ]; do
+
+
+####################################################################
+# Descargar repositorios
+####################################################################
+		if [ "$opcion31" = "1 - Descargar repositorios" ]; then
+			clear
+			if [ ! -x /home/`echo $USER`/Repos  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nSe va a crear la carpeta de repositorios dentro de nuestro home" 10 50 5
+				clear
+				cd /home/`echo $USER`/ && mkdir Repos
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/ArkCORE  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nVamos a obtener los repositorios de ArkCORE" 10 50 5
+				clear
+				cd $repos && git clone $rep_arkcore
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/ArkDB  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nVamos a descargar los repositorios de ArkDB." 10 50 5
+				clear
+				cd $repos && git clone $rep_arkdb
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/esWoW2-Cata-es  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\nLas traducciones en español para España" 10 50 5
+				clear
+				cd $repos && git clone $rep_cata_es
+			fi
+			if [ ! -x /home/`echo $USER`/Repos/esWoW2-Cata-mx  ];then
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--pause "\ny finalmente las traducciones en español para Latino-América." 10 50 5
+				clear
+				cd $repos && git clone $rep_cata_mx
+			fi
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nTodos los repositorios están descargados." 8 50
+			clear
+
+
+####################################################################
+# Actualizar repositorios 
+####################################################################
+		elif [ "$opcion31" = "2 - Actualizar repositorios" ]; then
+			cd $core_ark && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios del core actualizados." 10 50 5
+			clear
+			cd $repos/ArkDB && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios de las bases de datos actualizados." 10 50 5
+			clear
+			cd $repos/esWoW2-Cata-es && git pull origin master
+			cd $repos/esWoW2-Cata-mx && git pull origin master
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--pause "\nRepositorios de las traducciones actualizados." 10 50 5
+			clear
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nTodos los repositorios han sido actualizados." 8 50
+			clear
+		fi
+
+
+########  CONCLUSIÓN MENÚ Obtención o actualización de todos los archivos necesarios  ########  
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nManejo de Repositorios y archivos" 20 60 8 \
+		"1 - Descargar repositorios" "" \
+		"2 - Actualizar repositorios" "" \
+		"0 - Volver" "" 2> ~/var31
+		
+		opcion31=$(cat ~/var31)
+		rm ~/var*
+		done
+
+
+####################################################################
+# Compilar el emulador
+####################################################################
+	elif [ "$opcion30" = "2 - Compilar el emulador" ]; then
+		if [ ! -x $core_ark/build  ];then
+			cd $core_ark && mkdir build
+		fi
+		if [ ! -x $server_ark  ];then
+			cd /home/`echo $USER`/ && mkdir Server_ark
+		fi
+		if [ ! -x $server_ark/Backups  ];then
+			cd $server_ark && mkdir Backups
+		fi
+		if [ ! -x $server_ark/logs  ];then
+			cd $server_ark && mkdir logs
+		fi
+		cd $core_ark/build  && clear
+		cmake ../ -DPREFIX=/home/`echo $USER`/Server_ark
+		make -j$cores && sudo make install
+		sudo chown -R `echo $USER` $server_ark
+		if [ ! -x $server_ark/bin/world.pid  ];then
+			echo "123456" >> $server_ark/bin/world.pid
+		fi
+		
+		dialog --title "INFORMACIÓN" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--msgbox "\nHas terminado de compilar tu emulador. Si todo ha salido correctamete lo encontrarás en tu home, dentro de la carpeta Server_ark" 8 50
+		clear
+
+
+####################################################################
+# DBC's, maps y vmaps - Descarga y colocación en directorio
+####################################################################
+	elif [ "$opcion30" = "3 - DBC's, maps y vmaps - Descarga y colocación en directorio" ]; then
+		if [ ! -x $server_ark/data  ];then
+			clear && cd $server_ark
+			wget http://dl.dropbox.com/u/62758511/data.tar.gz
+			tar xvzf data.tar.gz && rm data.tar.gz
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nSe ha creado una carpeta llamada data con las dbc, maps y vmaps en su interior" 8 50
+			clear
+		else
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nYa está la carpeta data creada y no se han descargado los archivos.\n\nSi deseas reinstalarlos de nuevo, borra la carpeta data de tu directorio del servidor y ejecuta de nuevo este mismo paso" 12 50
+		fi
+
+
+####################################################################
+# Instalar las Bases de Datos
+####################################################################
+	elif [ "$opcion30" = "4 - Instalar las Bases de Datos" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar las Bases de Datos" 20 80 8 \
+		"1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" "" \
+		"2 - Instalar base de datos auth" "" \
+		"3 - Instalar base de datos characters" "" \
+		"0 - Volver" "" 2> ~/var32
+		  
+		opcion32=$(cat ~/var32)
+		rm ~/var32
+	
+		while [ "$opcion32" != "0 - Volver" ]; do
+
+
+####################################################################
+# Instalar base de datos world
+####################################################################
+		if [ "$opcion32" = "1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" ]; then
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nInstalar base de datos world" 20 80 8 \
+			"1 - Instalar base de datos ArkDB" "" \
+			"2 - Reservado" "" \
+			"3 - Reservado" "" \
+			"0 - Volver" "" 2> ~/var33
+		  
+			opcion33=$(cat ~/var33)
+			rm ~/var33
+	
+			while [ "$opcion33" != "0 - Volver" ]; do
+
+
+####################################################################
+# Instalar base de datos ArkDB
+####################################################################
+			if [ "$opcion33" = "1 - Instalar base de datos ArkDB" ]; then
+				dialog --title "ATENCIÓN!" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--defaultno \
+				--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${world} ¿Estás seguro?" 8 50 
+				if [ $? = 0 ]; then
+					mysql $conecta -e "DROP DATABASE IF EXISTS ${world};"
+					mysql $conecta -e "create database ${world} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+					clear && echo "IMPORTANDO ARCHIVO PRINCIPAL..."
+					mysql $conecta ${world} < $db_ark/arkdb.sql
+					clear && echo "IMPORTANDO ARCHIVOS SECUNDARIOS..."
+					max=`ls -1 "${db1_ark}"/*.sql | wc -l`
+					i=0
+					for archivo in "${db1_ark}"/*.sql; do
+					i=$((${i}+1))
+					echo " [${i}/${max}] importando: ${archivo##*/}"
+					mysql $conecta ${world} < "${archivo}"
+					done
+					clear && echo "IMPORTANDO ARCHIVOS DE ACTUALIZACIONES DEL CORE..." && sleep 5s
+					max=`ls -1 "${db_act_ark}"/*.sql | wc -l`
+					i=0
+					for archivo in "${db_act_ark}"/*.sql; do
+					i=$((${i}+1))
+					echo " [${i}/${max}] importando: ${archivo##*/}"
+					mysql $conecta ${world} < "${archivo}"
+					done	
+					dialog --title "INFORMACIÓN" \
+					--backtitle "http://linux.msgsistemes.es" \
+					--msgbox "\nFinalizada la instalación de la base de datos ArkDB en ${world}." 10 50
+					clear
+				fi
+			fi
+
+
+########  CONCLUSIÓN MENÚ Instalar base de datos world  ######## 
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nInstalar base de datos world" 20 80 8 \
+			"1 - Instalar base de datos ArkDB" "" \
+			"2 - Reservado" "" \
+			"3 - Reservado" "" \
+			"0 - Volver" "" 2> ~/var33
+		  
+			opcion33=$(cat ~/var33)
+			rm ~/var33
+			done
+
+
+####################################################################
+# Instalar base de datos auth
+####################################################################
+		elif [ "$opcion32" = "2 - Instalar base de datos auth" ]; then
+			dialog --title "ATENCIÓN!" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--defaultno \
+			--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${auth} ¿Estás seguro?" 8 50
+			if [ $? = 0 ]; then
+				mysql $conecta -e "DROP DATABASE IF EXISTS ${auth};"
+				mysql $conecta -e "create database ${auth} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+				clear && echo "IMPORTANDO ..." && sleep 5s
+				mysql $conecta ${auth} < $sqlauth_ark/auth.sql
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nFinalizada la instalación de la base de datos Auth en ${auth}." 10 50
+				clear
+			fi
+
+
+####################################################################
+# Instalar base de datos characters
+####################################################################
+		elif [ "$opcion32" = "3 - Instalar base de datos characters" ]; then
+			dialog --title "ATENCIÓN!" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--defaultno \
+			--yesno "\nEstás a punto de instalar una base de datos vacía. Esto eliminará cualquier base datos que tubieras llamada ${char} ¿Estás seguro?" 8 50
+			if [ $? = 0 ]; then
+				mysql $conecta -e "DROP DATABASE IF EXISTS ${char};"
+				mysql $conecta -e "create database ${char} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+				clear && echo "IMPORTANDO ..." && sleep 5s
+				mysql $conecta ${char} < $sqlchar_sky/character_database.sql
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nFinalizada la instalación de la base de datos Characters en ${char}." 10 50
+				clear
+			fi
+		fi
+
+
+########  CONCLUSIÓN MENÚ Instalar las Bases de Datos  ######## 
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar las Bases de Datos" 20 80 8 \
+		"1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" "" \
+		"2 - Instalar base de datos auth" "" \
+		"3 - Instalar base de datos characters" "" \
+		"0 - Volver" "" 2> ~/var32
+		  
+		opcion32=$(cat ~/var32)
+		rm ~/var32
+		done
+
+
+####################################################################
+# Instalar traducciones al español de eswow2
+####################################################################
+	elif [ "$opcion30" = "5 - Instalar traducciones al español de eswow2" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar traducciones al español de eswow2" 20 80 8 \
+		"1 - Traducción de Cataclysm a Español de España" "" \
+		"2 - Traducción de Cataclysm a Español de Latino-América" "" \
+		"0 - Volver" "" 2> ~/var34
+	  
+		opcion34=$(cat ~/var34)
+		rm ~/var34
+
+		while [ "$opcion34" != "0 - Volver" ]; do
+
+
+
+####################################################################
+# Traducción de Cataclysm a Español de España
+####################################################################
+		if [ "$opcion34" = "1 - Traducción de Cataclysm a Español de España" ]; then
+			clear
+			max=`ls -1 "${cata_es_ark}"/*.sql | wc -l`
+			i=0
+			for table in "${cata_es_ark}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] Importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nFinalizada la traducción de la base de datos." 10 50
+			clear
+
+####################################################################
+# Traducción de Cataclysm a Español de Latino-América
+####################################################################
+		elif [ "$opcion34" = "2 - Traducción de Cataclysm a Español de Latino-América" ]; then
+			clear
+			max=`ls -1 "${cata_mx_ark}"/*.sql | wc -l`
+			i=0
+			for table in "${cata_mx_ark}"/*.sql; do
+			i=$((${i}+1))
+			echo " [${i}/${max}] Importando: ${table##*/}"
+			mysql $conecta ${world} < "${table}"
+			done
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nFinalizada la traducción de la base de datos." 10 50
+			clear
+		fi
+
+
+########  CONCLUSIÓN MENÚ Instalar traducciones al español de eswow2  ######## 
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nInstalar traducciones al español de eswow2" 20 80 8 \
+		"1 - Traducción de Cataclysm a Español de España" "" \
+		"2 - Traducción de Cataclysm a Español de Latino-América" "" \
+		"0 - Volver" "" 2> ~/var34
+	  
+		opcion34=$(cat ~/var34)
+		rm ~/var34
+		done
+
+
+####################################################################
+# Configuraciones varias
+####################################################################
+	elif [ "$opcion30" = "6 - Configuraciones varias" ]; then
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nConfiguraciones varias" 20 80 8 \
+		"1 - Configurar tabla realmlist de la base de datos auth" "" \
+		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"0 - Volver" "" 2> ~/var35
+		  
+		opcion35=$(cat ~/var35)
+		rm ~/var35
+	
+		while [ "$opcion35" != "0 - Volver" ]; do
+
+
+####################################################################
+# Configurar tabla realmlist de la base de datos auth
+####################################################################
+		if [ "$opcion35" = "1 - Configurar tabla realmlist de la base de datos auth" ]; then
+			if [ ! -x $server_ark/etc/confrealm.sql  ];then
+				rm -f $server_ark/etc/confrealm.sql
+			fi
+			echo "REPLACE INTO \`realmlist\` (\`id\`,\`name\`,\`address\`,\`port\`,\`icon\`,\`color\`,\`timezone\`,\`allowedSecurityLevel\`,\`population\`,\`gamebuild\`) VALUES
+(1,'NombreReino','addressReino',portReino,1,0,1,0,0,13623);" >> $server_ark/etc/confrealm.sql
+
+			conf6=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nNombre que le quieres dar a tu reino:" 10 51 Arkania 2>&1 >/dev/tty)
+			sed -e "s/NombreReino/$conf6/g" -i $server_ark/etc/confrealm.sql
+
+			conf7=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nIp de conexión a tu servidor:" 10 51 127.0.0.1 2>&1 >/dev/tty)
+			sed -e "s/addressReino/$conf7/g" -i $server_ark/etc/confrealm.sql
+
+			conf8=$(dialog --title "CONFIGURACIÓN TABLA realmlist de la DB auth" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--inputbox "\nPuerto de conexión:" 10 51 8085 2>&1 >/dev/tty)
+			sed -e "s/portReino/$conf8/g" -i $server_ark/etc/confrealm.sql
+
+			mysql $conecta $auth < $server_ark/etc/confrealm.sql
+			rm -f $server_ark/etc/confrealm.sql
+			dialog --title "INFORMACIÓN" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--msgbox "\nYa tienes la Tabla realmlist configurada" 10 50
+			clear
+
+
+
+####################################################################
+# Configurar authserver.conf y worldserver.conf
+####################################################################
+
+		elif [ "$opcion35" = "2 - Configurar authserver.conf y worldserver.conf" ]; then
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nConfigurar authserver.conf y worldserver.conf" 20 80 8 \
+			"1 - Configurar archivo authserver.conf" "" \
+			"2 - Configurar archivo worldserver.conf" "" \
+			"0 - Volver" "" 2> ~/var36
+			  
+			opcion36=$(cat ~/var36)
+			rm ~/var36
+	
+			while [ "$opcion36" != "0 - Volver" ]; do
+
+
+
+####################################################################
+# 7.2.1 - Configurar Authserver.conf
+####################################################################
+
+			if [ "$opcion36" = "1 - Configurar archivo authserver.conf" ]; then
+				if [ ! -x $server_ark/etc/authserver.temp  ];then
+					rm -f $server_ark/etc/authserver.temp
+				fi
+				cp $server_ark/etc/authserver.conf.dist $server_ark/etc/authserver.temp
+
+				sed -e "s/LoginDatabaseInfo = \"127\.0\.0\.1;3306;arkcore;arkania;auth\"/LoginDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_ark/etc/authserver.temp
+
+				conf=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nDirectorio del archivo logs: \nValor por defecto logs" 10 51 logs 2>&1 >/dev/tty)
+				sed -e "s/LogsDir = \"\"/LogsDir = \"\.\.\/$conf\"/g" -i $server_ark/etc/authserver.temp
+
+				conf2=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nConfiguración de los colores de salida en terminal: \nValor por defecto 13 11 9 5" 10 51 "13 11 9 5" 2>&1 >/dev/tty)	
+				sed -e "s/LogColors = \"\"/LogColors = \"$conf2\"/g" -i $server_ark/etc/authserver.temp
+
+				conf3=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nUsuario de MySQL: \nValor por defecto root" 10 51 root 2>&1 >/dev/tty)
+				sed -e "s/sqluser/$conf3/g" -i $server_ark/etc/authserver.temp
+
+				conf4=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--insecure \
+				--passwordbox "\nContraseña de MySQL: " 10 51 2>&1 >/dev/tty)
+				sed -e "s/sqlpass/$conf4/g" -i $server_ark/etc/authserver.temp
+
+				conf5=$(dialog --title "CONFIGURACIÓN DEL authserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 10 51 $auth 2>&1 >/dev/tty)
+				sed -e "s/dbauth/$conf5/g" -i $server_ark/etc/authserver.temp
+
+				# PidFile = "auth.pid" NO TOCAR!!! IMPRESCINDIBLE.
+				sed -e "s/PidFile = \"\"/PidFile = \"auth.pid\"/g" -i $server_ark/etc/authserver.temp
+
+				cp $server_ark/etc/authserver.temp $server_ark/etc/authserver.conf
+				rm -f $server_ark/etc/authserver.temp
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nHas configurado el archivo authserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor de logueo (./authserver)." 10 50
+				clear
+
+
+####################################################################
+# 7.2.2 - Configurar Worldserver.conf
+####################################################################
+
+			elif [ "$opcion36" = "2 - Configurar archivo worldserver.conf" ]; then
+				if [ ! -x $server_ark/etc/world.conf  ];then
+					rm -f $server_ark/etc/world.conf
+				fi
+				cp $server_ark/etc/worldserver.conf.dist $server_ark/etc/world.conf
+				sed -e "s/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;arkania;arkania;auth\"/LoginDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbauth\"/g" -i $server_ark/etc/world.conf
+				sed -e "s/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;arkania;arkania;world\"/WorldDatabaseInfo     = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbworld\"/g" -i $server_ark/etc/world.conf
+				sed -e "s/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;arkania;arkania;characters\"/CharacterDatabaseInfo = \"127\.0\.0\.1;3306;sqluser;sqlpass;dbchar\"/g" -i $server_ark/etc/world.conf
+
+				conf6=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 1/42\n\nDirectorio del archivo data: \nValor por defecto data" 12 51 data 2>&1 >/dev/tty)
+				sed -e "s/DataDir = \"\.\"/DataDir = \"\.\.\/$conf6\"/g" -i $server_ark/etc/world.conf
+
+				conf7=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 2/42\n\nDirectorio del archivo logs: \nValor por defecto logs" 12 51 logs 2>&1 >/dev/tty)
+				sed -e "s/LogsDir = \"logs\"/LogsDir = \"\.\.\/$conf7\"/g" -i $server_ark/etc/world.conf
+
+				conf8=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 3/42\n\nUsuario de MySQL: \nValor por defecto root" 12 51 root 2>&1 >/dev/tty)
+				sed -e "s/sqluser/$conf8/g" -i $server_ark/etc/world.conf
+
+				conf9=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--insecure \
+				--passwordbox "\nOpción 4/42\n\nContraseña de MySQL: " 12 51 2>&1 >/dev/tty)
+				sed -e "s/sqlpass/$conf9/g" -i $server_ark/etc/world.conf
+
+				conf10=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 5/42\n\nNombre de la base de datos Autentificación: \nValor por defecto $auth" 12 51 $auth 2>&1 >/dev/tty)
+				sed -e "s/dbauth/$conf10/g" -i $server_ark/etc/world.conf
+
+				conf11=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 6/42\n\nNombre de la base de datos del World: \nValor por defecto $world" 12 51 $world 2>&1 >/dev/tty)
+				sed -e "s/dbworld/$conf11/g" -i $server_ark/etc/world.conf
+
+				conf12=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 7/42\n\nNombre de la base de datos de Characters: \nValor por defecto $characters" 12 51 $char 2>&1 >/dev/tty)
+				sed -e "s/dbchar/$conf12/g" -i $server_ark/etc/world.conf
+
+				conf13=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 8/42\n\nPuerto de conexión al worldserver: \nValor por defecto 8085" 12 51 8085 2>&1 >/dev/tty)
+				sed -e "s/WorldServerPort = 8085/WorldServerPort = $conf13/g" -i $server_ark/etc/world.conf
+
+				conf14=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 9/42\n\nLímite de jugadores conectados simultaneamente: \nValor por defecto 100" 12 51 100 2>&1 >/dev/tty)
+				sed -e "s/PlayerLimit = 100/PlayerLimit = $conf14/g" -i $server_ark/etc/world.conf
+
+				# RESERVADO
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 11/42\n\n¿Quieres que se cree un archivo log con los comandos o acciones realizadas como GM?\nEs recomendable si tienes nuevos GM y quieres ver como trabajan." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/LogDB.GM = 0/LogDB.GM = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 12/42\n\n¿Quieres que se cree un archivo log con las conexiones desde telnet?\nEs útil si tienes una tienda web o gestionas el servidor por telnet." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/LogDB.RA = 0/LogDB.RA = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--nocancel \
+				--menu "\nOpción 13/42\n\nTipo de Reino - Quieres un reino PVP o Normal?\nEn los reinos normales se puede desconetar que los de la facción contraria te puedan atacer. En los PVP te pueden atacar menos en los santuarios.\n\n\n\n" 20 80 4 \
+				"1 - Reino PVP" "" \
+				"2 - Reino Normal" "" 2> conf16
+				conf16=$(cat conf16)
+				if [ "$conf16" = "1 - Reino PVP" ]; then
+				sed -e "s/GameType = 0/GameType = 1/g" -i $server_ark/etc/world.conf
+				else
+					sed -e "s/GameType = 0/GameType = 0/g" -i $server_ark/etc/world.conf
+				fi
+				rm conf16
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 14/42\n\n¿Quieres activar el avance de nivel de las hermandades?\nTodavía experimental en esta versión de emulador." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/GuildAdvancement.Enabled = 0/GuildAdvancement.Enabled = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 15/42\n\n¿Quieres que se anuncien por taberna los eventos automáticos?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Event.Announce = 0/Event.Announce = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 16/42\n\n¿Quieres activar el buscador de mazmorras?\nTodavía experimental en esta versión de emulador" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/DungeonFinder.Enable = 0/DungeonFinder.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--defaultno \
+				--yesno "\nOpción 17/42\n\n¿Quieres que en la misma cuenta se puedan crear alianzas y hordas?" 12 51
+				if [ $? = 1 ]; then
+					sed -e "s/AllowTwoSide.Accounts = 1/AllowTwoSide.Accounts = 0/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 18/42\n\n¿Quieres que los Alianzas y los Hordas se puedan comunicar por los canales de chat como taberna o \"decir\"?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Chat = 0/AllowTwoSide.Interaction.Chat = 1/g" -i $server_ark/etc/world.conf && sed -e "s/AllowTwoSide.Interaction.Channel = 0/AllowTwoSide.Interaction.Channel = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 19/42\n\n¿Quieres que se puedan crear grupos mixtos entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor poder hacer mazmorras o raids conjuntamente." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Group = 0/AllowTwoSide.Interaction.Group = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 20/42\n\n¿Quieres que se pueda interactuar en las subastas entre Hordas y Alianzas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Auction = 0/AllowTwoSide.Interaction.Auction = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 21/42\n\n¿Quieres que se pueda mandar correos a la facción contraria?." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Interaction.Mail = 0/AllowTwoSide.Interaction.Mail = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 22/42\n\n¿Quieres que se pueda comerciar con la facción contraria?." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/AllowTwoSide.Trade = 0/AllowTwoSide.Trade = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nOpción 23/42\n\nRATES DEL SERVIDOR:\n\nLos rates son lo que determinan lo rápido que se avanza en el juego.\nLos servidores de Blizzard tienen un rate de x1 por lo que si nosotros ponemos rates x3 se multiplican los valores al triple.\nEjemplo: Ponemos rates de experiencia al matar bichos x3. Si al nivel 10 para subir al 11 debemos matar 30 zebras en el de Blizzard, al nuestro con 10 ya subiríamos." 22 60
+				clear
+
+				conf17=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 24/42\n\nRATES DEL SERVIDOR:\nRates de objetos mediocres(grises)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Poor             = 1/Rate.Drop.Item.Poor             = $conf17/g" -i $server_ark/etc/world.conf
+
+				conf18=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 25/42\n\nRATES DEL SERVIDOR:\nRates de objetos normales(blancos)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Normal           = 1/Rate.Drop.Item.Normal           = $conf18/g" -i $server_ark/etc/world.conf
+
+				conf19=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 26/42\n\nRATES DEL SERVIDOR:\nRates de objetos poco frecuentes(verdes)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Uncommon         = 1/Rate.Drop.Item.Uncommon         = $conf19/g" -i $server_ark/etc/world.conf
+
+				conf20=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 27/42\n\nRATES DEL SERVIDOR:\nRates de objetos raros(azules)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Rare             = 1/Rate.Drop.Item.Rare             = $conf20/g" -i $server_ark/etc/world.conf
+
+				conf21=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 28/42\n\nRATES DEL SERVIDOR:\nRates de objetos épicos(morados)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Epic             = 1/Rate.Drop.Item.Epic             = $conf21/g" -i $server_ark/etc/world.conf
+
+				conf22=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 29/42\n\nRATES DEL SERVIDOR:\nRates de objetos legendarios(anaranjados)" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Legendary        = 1/Rate.Drop.Item.Legendary        = $conf22/g" -i $server_ark/etc/world.conf
+
+				conf23=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 30/42\n\nRATES DEL SERVIDOR:\nRates de objetos artefactos" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Artifact         = 1/Rate.Drop.Item.Artifact         = $conf23/g" -i $server_ark/etc/world.conf
+
+				conf24=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 31/42\n\nRATES DEL SERVIDOR:\nRates de objetos de misión" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Item.Referenced       = 1/Rate.Drop.Item.Referenced       = $conf24/g" -i $server_ark/etc/world.conf
+
+				conf25=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 32/42\n\nRATES DEL SERVIDOR:\nRates de dinero" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.Drop.Money                 = 1/Rate.Drop.Money                 = $conf25/g" -i $server_ark/etc/world.conf
+
+				conf26=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 33/42\n\nRATES DEL SERVIDOR:\nRates experiencia por muertes" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Kill    = 1/Rate.XP.Kill    = $conf26/g" -i $server_ark/etc/world.conf
+
+				conf27=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 34/42\n\nRATES DEL SERVIDOR:\nRates experiencia en misiones" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Quest   = 1/Rate.XP.Quest   = $conf27/g" -i $server_ark/etc/world.conf
+
+				conf28=$(dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--inputbox "\nOpción 35/42\n\nRATES DEL SERVIDOR:\nRates experiencia por exploración" 12 51 1 2>&1 >/dev/tty)
+				sed -e "s/Rate.XP.Explore = 1/Rate.XP.Explore = $conf28/g" -i $server_ark/etc/world.conf
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 36/42\n\n¿Quieres que se anuncie por canal global cuando se anote alguien a BG?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Battleground.QueueAnnouncer.Enable = 0/Battleground.QueueAnnouncer.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 37/42\n\n¿Quieres que esté funcional Wintergrasp?\nTodavía experimental en esta versión de emulador." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Wintergrasp.Enable = 0/Wintergrasp.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 38/42\n\n¿Quieres que esté funcional Tol Barad?\nTodavía experimental en esta versión de emulador." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Tol Barad.Enable = 0/Tol Barad.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 39/42\n\n¿Quieres que se adjudiquen los puntos de arenas automáticamente cada semana? Es recomendable que sí." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Arena.AutoDistributePoints = 0/Arena.AutoDistributePoints = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 40/42\n\n¿Quieres que se anuncie por canal global cuando se anote un grupo a arenas?\nEsto es útil para cuando hay poca población en el servidor." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Arena.QueueAnnouncer.Enable = 0/Arena.QueueAnnouncer.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 41/42\n\n¿Deseas activar el acceso a la máquina por telnet?\nEsto es necesario si quieres tener una tienda de artículos en la web o gestionar el servidor remotamente." 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/Ra.Enable = 0/Ra.Enable = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				dialog --title "CONFIGURACIÓN DEL worldserver.conf" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--yesno "\nOpción 42/42\n\n¿Si un jugador es Kickeado por un GM, quieres que se muestre el anuncio del kick por el canal global?" 12 51
+				if [ $? = 0 ]; then
+					sed -e "s/ShowKickInWorld = 0/ShowKickInWorld = 1/g" -i $server_ark/etc/world.conf
+				fi
+
+				### Configuraciones que cambiamos automáticamente:
+				#PlayerSaveInterval = 900000
+				sed -e "s/PlayerSaveInterval = 900000/PlayerSaveInterval = 300000/g" -i $server_ark/etc/world.conf
+
+				#MaxCoreStuckTime = 0
+				sed -e "s/MaxCoreStuckTime = 0/MaxCoreStuckTime = 10/g" -i $server_ark/etc/world.conf
+
+				#GmLogPerAccount = 0
+				sed -e "s/GmLogPerAccount = 0/GmLogPerAccount = 1/g" -i $server_ark/etc/world.conf
+
+				#RealmZone = 1
+				sed -e "s/RealmZone = 1/RealmZone = 11/g" -i $server_ark/etc/world.conf
+
+				#Motd = "Welcome to a ArkCORE....
+				sed -e "s/Welcome to a ArkCORE server.@If your seeing this message@it's because the developer hasnt read configs fully/Bienvenido a nuestro servidor./g" -i $server_ark/etc/world.conf
+				#AllowPlayerCommands = 0
+				sed -e "s/AllowPlayerCommands = 0/AllowPlayerCommands = 1/g" -i $server_ark/etc/world.conf
+
+				#Die.Command.Mode = 1
+				sed -e "s/Die.Command.Mode = 1/Die.Command.Mode = 0/g" -i $server_ark/etc/world.conf
+
+				#IF YOUR READING THIS YOUR DEVELOPER HAS NOT READ ALL OF THE CONFIGERATION FILE!
+				sed -e "s/IF YOUR READING THIS YOUR DEVELOPER HAS NOT READ ALL OF THE CONFIGERATION FILE!/World of Warcraft - Cataclysm/g" -i $server_ark/etc/world.conf
+
+				#PidFile = "world.pid"  IMPRESCINDIBLE!!! NO TOCAR.  
+				sed -e "s/PidFile = \"\"/PidFile = \"world.pid\"/g" -i $server_ark/etc/world.conf
+
+				cp $server_ark/etc/world.conf $server_ark/etc/worldserver.conf
+				rm -f $server_ark/etc/world.conf
+				dialog --title "INFORMACIÓN" \
+				--backtitle "http://linux.msgsistemes.es" \
+				--msgbox "\nHas configurado el archivo worldserver.conf.\n\nSi los valores que has introducido son correctos ya puedes arrancar el servidor del juego." 10 50
+				clear
+			fi
+
+
+########  CONCLUSIÓN MENÚ Configurar authserver.conf y worldserver.conf  ########
+			dialog --title "Menú de opciones --- Creado por MSANCHO" \
+			--backtitle "http://linux.msgsistemes.es" \
+			--nocancel \
+			--menu "\nConfigurar authserver.conf y worldserver.conf" 20 80 8 \
+			"1 - Configurar archivo authserver.conf" "" \
+			"2 - Configurar archivo worldserver.conf" "" \
+			"0 - Volver" "" 2> ~/var36
+		  
+			opcion36=$(cat ~/var36)
+			rm ~/var36
+			done
+		fi
+
+
+########  CONCLUSIÓN MENÚ Configuraciones varias  ########
+		dialog --title "Menú de opciones --- Creado por MSANCHO" \
+		--backtitle "http://linux.msgsistemes.es" \
+		--nocancel \
+		--menu "\nConfiguraciones varias" 20 80 8 \
+		"1 - Configurar tabla realmlist de la base de datos auth" "" \
+		"2 - Configurar authserver.conf y worldserver.conf" "" \
+		"0 - Volver" "" 2> ~/var35
+		  
+		opcion35=$(cat ~/var35)
+		rm ~/var35
+		done
+	fi
+
+
+########  CONCLUSIÓN MENÚ SkyFire versión 4.0.6a (13623)  ######## 
 	dialog --title "Menú de opciones --- Creado por MSANCHO" \
 	--backtitle "http://linux.msgsistemes.es" \
 	--nocancel \
@@ -1247,17 +2064,16 @@ elif [ "$opcion0" = "4 - Trinitycore versión 3.3.5a (12340)" ]; then
 	"5 - Instalar traducciones al español de eswow2" "" \
 	"6 - Configuraciones varias" "" \
 	"0 - Salir de la aplicación" "" 2> ~/var30
-		  
-	opcion30=$(cat $user/var30)
-	rm ~/var*
+	  
+	opcion30=$(cat ~/var30)
 	if [ "$opcion30" = "0 - Salir de la aplicación" ]; then
+		rm ~/var*
 		dialog --title "Menú de opciones --- Creado por MSANCHO" \
 		--backtitle "http://linux.msgsistemes.es" \
 		--msgbox "\nGracias por usar el script de instalación." 10 50
-		clear
 		exit
 	fi
-	done'
+	done
 
 
 #####################################################################################################
