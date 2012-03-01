@@ -5,45 +5,45 @@ NUEVO SCRIPT DE INSTALACIÓN Y GESTIÓN DE SERVIDORES EN DEBIAN
 
 Funciones actuales y futuras:
 
-- Soporte multicore  - EN PROCESO
+- Soporte multicore  - TERMINADO
 
 - Instalación de los programas esenciales para la compilación del emulador  - FUNCIONAL
 
 - Descarga de repositorios para SkyFire  - TERMINADO
 
-- Descarga de repositorios para Arkania  - PENDIENTE
+- Descarga de repositorios para Arkania  - TERMINADO
 
-- Descarga de repositorios para TrinityCore  - PENDIENTE
+- Descarga de repositorios para TrinityCore  - TERMINADO
 
 - Actualización repositorios de SkyFire  - FUNCIONAL
 
-- Actualización repositorios de Arkania  - PENDIENTE
+- Actualización repositorios de Arkania  - TERMINADO
 
-- Actualización repositorios de TrinityCore  - PENDIENTE
+- Actualización repositorios de TrinityCore  - TERMINADO
 
 - Compilación del emulador en SkyFire  - TERMINADO
 
-- Compilación del emulador en Arkania  - PENDIENTE
+- Compilación del emulador en Arkania  - TERMINADO
 
-- Compilación del emulador en TrinityCore  - PENDIENTE
+- Compilación del emulador en TrinityCore  - TERMINADO
 
 - Instalación Bases de Datos en SkyFire  - FUNCIONAL
 
-- Instalación Bases de Datos en Arkania  - PENDIENTE
+- Instalación Bases de Datos en Arkania  - TERMINADO
 
-- Instalación Bases de Datos en TrinityCore  - PENDIENTE
+- Instalación Bases de Datos en TrinityCore  - TERMINADO
 
 - Instalación traducciones eswow2 en SkyFire  - TERMINADO
 
-- Instalación traducciones eswow2 en Arkania  - PENDIENTE
+- Instalación traducciones eswow2 en Arkania  - TERMINADO
 
-- Instalación traducciones eswow2 en TrinityCore  - PENDIENTE
+- Instalación traducciones eswow2 en TrinityCore  - TERMINADO
 
 - Colocación de dbc, maps y vmaps en SkyFire  - FUNCIONAL - Necesito las DBC en español!!!
 
-- Colocación de dbc, maps y vmaps en Arkania  - PENDIENTE - Necesito las DBC en español!!!
+- Colocación de dbc, maps y vmaps en Arkania  - FUNCIONAL - Necesito las DBC en español!!!
 
-- Colocación de dbc, maps y vmaps en TrinityCore  - PENDIENTE - Necesito las DBC en español!!!
+- Colocación de dbc, maps y vmaps en TrinityCore  - FUNCIONAL - Necesito las DBC en español!!!
 
 - Copias de seguridad de las bases de datos  - EN PROCESO
 
@@ -53,7 +53,7 @@ Funciones actuales y futuras:
 
 - Actualización de las bases de datos en TrinityCore  - PENDIENTE
 
-- Creación de script multicore  - EN PROCESO
+- Creación de script multicore  - FUNCIONAL
 
 - Adaptación del Script para sistemas basados CentOS - PENDIENTE
 
@@ -61,7 +61,7 @@ Funciones actuales y futuras:
 
 - Creación de una web de Registro  - PENDIENTE
 
-- Crear menú para escoger idioma de la traducción (es / mx)  - EN PROCESO
+- Crear menú para escoger idioma de la traducción (es / mx)  - FUNCIONAL
 
 - Submenú para escoger base de datos world  - TERMINADO
 
@@ -69,15 +69,15 @@ Funciones actuales y futuras:
 
 - Configurador de la tabla realmlist de la DB auth en SkyFire  - FUNCIONAL
 
-- Configurador de la tabla realmlist de la DB auth en Arkania  - PENDIENTE
+- Configurador de la tabla realmlist de la DB auth en Arkania  - FUNCIONAL
 
-- Configurador de la tabla realmlist de la DB auth en Trinitycore  - PENDIENTE
+- Configurador de la tabla realmlist de la DB auth en Trinitycore  - FUNCIONAL
 
 - Configurador de archivos worldserver.conf y authserver.conf en SkyFire  - FUNCIONAL
 
-- Configurador de archivos worldserver.conf y authserver.conf en Arkania - PENDIENTE
+- Configurador de archivos worldserver.conf y authserver.conf en Arkania - FUNCIONAL
 
-- Configurador de archivos worldserver.conf y authserver.conf en Trinitycore - PENDIENTE
+- Configurador de archivos worldserver.conf y authserver.conf en Trinitycore - FUNCIONAL
 
 - Añadir una guía de usuario  - FUNCIONAL
 
