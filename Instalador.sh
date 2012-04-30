@@ -113,7 +113,7 @@ rep_cata_mx=git://github.com/tortosi/esWoW2-Cata-mx.git
 rep_wotlk_es=git://github.com/tortosi/esWoW2-WoTLK-es.git
 rep_wotlk_mx=git://github.com/tortosi/esWoW2-WoTLK-mx.git
 conecta="--host=${host} --user=${user} --port=${port} --password=${pass}"
-soft="php5-mysql mysql-admin mysql-client mysql-client-5.1 mysql-gui-tools-common mysql-query-browser mysql-server mysql-server-5.1 phpmyadmin apache2 apache2-doc apache2-suexec php5 libapache2-mod-php5 php-pear php5-dev php5-curl g++ gcc make cmake automake openssl mercurial zlib1g-dev libssl-dev libmysqlclient15-dev patch autoconf git git-core php5-gd libapache2-mod-auth-pam libapache2-mod-auth-mysql libbz2-dev libace-dev libmysqlclient-dev p7zip zlib1g-dev libbz2-dev gdb autoconf2.13 autoconf-archive gnu-standards autoconf-doc gettext binutils-doc g++-multilib g++-4.4-multilib gcc-4.4-doc libstdc++6-4.4-dbg gcc-multilib automake1.9 flex bison gcc-doc gcc-4.4-multilib libmudflap0-4.4-dev gcc-4.4-locales libgcc1-dbg libgomp1-dbg libmudflap0-dbg libcloog-ppl0 libppl-c2 libppl7 gdb-doc libace-doc libtao-dev glibc-doc libgd-tools libipc-sharedcache-perl libtool-doc libmcrypt-dev mcrypt libstdc++6-4.4-doc automaken gfortran fortran95-compiler gcj make-doc qct wish vim emacs kdiff3 tkdiff meld xxdiff python-mysqldb python-pygments libterm-readkey-perl tinyca postgresql-client apache apache-ssl libreadline5-dev"
+soft="php5-mysql mysql-admin mysql-client mysql-client-5.1 mysql-gui-tools-common mysql-query-browser mysql-server mysql-server-5.1 phpmyadmin apache2 apache2-doc apache2-suexec php5 libapache2-mod-php5 php-pear php5-dev php5-curl g++ gcc make cmake automake openssl mercurial zlib1g-dev libssl-dev libmysqlclient15-dev patch autoconf git git-core php5-gd libapache2-mod-auth-pam libapache2-mod-auth-mysql libbz2-dev libace-dev libmysqlclient-dev p7zip zlib1g-dev libbz2-dev gdb autoconf2.13 autoconf-archive gnu-standards autoconf-doc gettext binutils-doc g++-multilib g++-4.4-multilib gcc-4.4-doc libstdc++6-4.4-dbg gcc-multilib automake1.9 flex bison gcc-doc gcc-4.4-multilib libmudflap0-4.4-dev gcc-4.4-locales libgcc1-dbg libgomp1-dbg libmudflap0-dbg libcloog-ppl0 gdb-doc libace-doc libtao-dev glibc-doc libgd-tools libipc-sharedcache-perl libtool-doc libmcrypt-dev mcrypt libstdc++6-4.4-doc gfortran make-doc qct vim kdiff3 tkdiff meld xxdiff python-mysqldb python-pygments libterm-readkey-perl tinyca postgresql-client"
 
 
 #####################################################################################################
@@ -1407,7 +1407,7 @@ elif [ "$opcion0" = "3 - ArkCORE versión 4.0.6a (13623)" ]; then
 ####################################################################
 # Instalar base de datos world
 ####################################################################
-		if [ "$opcion32" = "1 - Instalar base de datos world  - SkyFireDB, CCDB o ArkDB" ]; then
+		if [ "$opcion32" = "1 - Instalar base de datos world" ]; then
 			dialog --title "Menú de opciones --- Creado por MSANCHO" \
 			--backtitle "http://linux.msgsistemes.es" \
 			--nocancel \
